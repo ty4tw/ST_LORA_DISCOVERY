@@ -188,7 +188,7 @@ int ST_LORA_DISCOVERY::send(String cmdBase, String cmdParam, String cmdValue, St
 {
     String  cmdStart = "AT";
     cmdStart += ( cmdBase == "" ? "" : "+" );
-    String cmdEnd = "\n\r";
+    String cmdEnd = "\r\n";
 
     _serialPort->listen();
 
