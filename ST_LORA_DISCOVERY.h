@@ -57,6 +57,10 @@ public:
     void sleep(void);
     void wakeup(void);
 
+    void setDevEUI(String devEUI);
+    void setAppEUI(String appEUI);
+    void setAppKey(String appKey);
+
 private:
     uint8_t getDr(void);
 

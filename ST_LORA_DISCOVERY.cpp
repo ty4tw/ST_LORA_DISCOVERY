@@ -58,6 +58,39 @@ ST_LORA_DISCOVERY::~ST_LORA_DISCOVERY(void)
 	// Intentionally blank
 }
 
+void ST_LORA_DISCOVERY::setDevEUI(String devEUI)
+{
+	String returnVal;
+	int rc = send(F("DEUI"), F("="), devEUI, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	if ( rc != LORA_RC_SUCCESS)
+	{
+		DebugPrint(F("Can't set DEVEUI\n"));
+	}
+	while(true);
+}
+
+void ST_LORA_DISCOVERY::setAppEUI(String appEUI)
+{
+	String returnVal;
+	int rc = send(F("DEUI"), F("="), appEUI, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	if ( rc != LORA_RC_SUCCESS)
+	{
+		DebugPrint(F("Can't set DEVEUI\n"));
+	}
+	while(true);
+}
+
+void ST_LORA_DISCOVERY::setAppKey(String appKey)
+{
+	String returnVal;
+	int rc = send(F("APPKEY"), F("="), appKey, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	if ( rc != LORA_RC_SUCCESS)
+	{
+		DebugPrint(F("Can't set DEVEUI\n"));
+	}
+	while(true);
+}
+
 
 void ST_LORA_DISCOVERY::begin(LoRaDR dr)
 {
@@ -116,7 +149,7 @@ bool ST_LORA_DISCOVERY::connect(void)
     String returnVal;
 
     clearCmd();
-
+    send(F("NJM"), F("="), F("1"), &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
 	send(F("JOIN"), nullString, nullString, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
 	delay(LoRa_RECEIVE_DELAY2);
 
@@ -154,7 +187,7 @@ uint8_t ST_LORA_DISCOVERY::getMaxPayloadSize(void)
 int ST_LORA_DISCOVERY::send(String cmdBase, String cmdParam, String cmdValue, String* returnVal, bool echo, uint32_t timeout)
 {
     String  cmdStart = "AT";
-    cmdStart += cmdBase == "" ? "" : "+";
+    cmdStart += ( cmdBase == "" ? "" : "+" );
     String cmdEnd = "\n\r";
 
     _serialPort->listen();
@@ -172,7 +205,7 @@ int ST_LORA_DISCOVERY::send(String cmdBase, String cmdParam, String cmdValue, St
     String resp;
     uint32_t  time = (timeout == 0 ? _txTimeoutValue : timeout );
     uint32_t tim = millis() + time + 100;
-    uint8_t cnt = cmdParam == "=?" ? 3 : 2;
+    uint8_t cnt = ( cmdParam == "=?" ? 3 : 2 );
     int pos = 0;
 
     while (millis() < tim)
