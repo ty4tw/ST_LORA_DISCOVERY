@@ -1,0 +1,19 @@
+{
+  "name": "ST_LORA_DISCOVERY",
+  "keywords": "LoRaWAN",
+  "description": "ST-LoRa-Discovery board AT cmds",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/ty4tw/ST_LORA_DISCOVERY"
+  },
+  "frameworks": "arduino",
+  "platforms": "atmelavr",
+  "version": "0.10.1",
+  "authors":
+	{
+    "name": "Tomoaki Yamaguchi",
+    "email": "tomoaki@tomy-tech.com"
+	},
+	"keywords":"lorawan,ST-LoRa-Discovery"
+}
