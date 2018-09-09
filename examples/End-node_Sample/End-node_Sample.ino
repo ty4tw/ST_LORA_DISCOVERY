@@ -1,16 +1,13 @@
 #include <KashiwaGeeks.h>
 #include <ST_LORA_DISCOVERY.h>
+#include "Commissioning.h"
 
 #define ECHO true
 
 ST_LORA_DISCOVERY LoRa(8,9);
 
-char* DevEUI = "";
-char* APPEUI = "";
-char* AppKey = "";
-
 //================================
-//          Initialize Device Function
+//    Initialize Device Function
 //================================
 
 void start()
@@ -39,16 +36,16 @@ void start()
     LoRa.begin(DR3);
 
     /* setup EUI & Key */
-    LoRa.setDevEUI(DevEUI);
-    LoRa.setAppEUI(AppEUI);
-    LoRa.setAppKey(AppKey);
+    LoRa.setDevEUI(LORAWAN_DEVICE_EUI);
+    LoRa.setAppEUI(LORAWAN_APPLICATION_EUI);
+    LoRa.setAppKey(LORAWAN_APPLICATION_KEY);
 
     /*  join LoRaWAN */
     LoRa.join();
 }
 
 //================================
-//          Power save functions
+//     Power save functions
 //================================
 void sleep(void)
 {
@@ -56,7 +53,7 @@ void sleep(void)
 
     //
     //  ToDo: Set Device to Power saving mode
-     //
+    //
 }
 
 void wakeup(void)
@@ -68,7 +65,7 @@ void wakeup(void)
 }
 
 //================================
-//          INT0, INT2 callbaks
+//     INT0, INT2 callbaks
 //================================
 void int0D2(void)
 {
@@ -91,25 +88,12 @@ void int1D3(void)
 float bme_temp = 10.2;
 float bme_humi = 20.2;
 float bme_press = 50.05;
-int16_t temp = bme_temp * 100;
-uint16_t humi = bme_humi * 100;
-uint32_t press = bme_press * 100;
 
 /*-------------------------------------------------------------*/
 void task1(void)
 {
-    ConsolePrint(F("\n  Task1 invoked\n\n"));
-    ConsolePrint(F("Temperature:  %d degrees C\n"), temp);
-    ConsolePrint(F("%%RH: %d %%\n"), humi);
-    ConsolePrint(F("Pressure: %d Pa\n"), press);
-
-}
-
-/*-------------------------------------------------------------*/
-void task2(void)
-{
     char buf[16];
-    ConsolePrint(F("\n  Task2 invoked\n\n"));
+    ConsolePrint(F("\n  Task1 invoked\n\n"));
     ConsolePrint(F("Temperature:  %s degrees C\n"), dtostrf(bme_temp, 6, 2, buf));
     ConsolePrint(F("%%RH: %s %%\n"), dtostrf(bme_humi, 6, 2, buf));
     ConsolePrint(F("Pressure: %s Pa\n"), dtostrf(bme_press, 6, 2, buf));
@@ -122,6 +106,16 @@ void task2(void)
     int rc = LoRa.sendPayload(LoRa_Port_COMP, ECHO, &pl);
     checkResult(rc);
 }
+
+/*-------------------------------------------------------------*/
+void task2(void)
+{
+    ConsolePrint(F("\n  Task2 invoked\n\n"));
+    ConsolePrint(F("Temperature:  %d degrees C\n"), temp);
+    ConsolePrint(F("%%RH: %d %%\n"), humi);
+    ConsolePrint(F("Pressure: %d Pa\n"), press);
+}
+
 
 /*-------------------------------------------------------------*/
 void checkResult(int rc )

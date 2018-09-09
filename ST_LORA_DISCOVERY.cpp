@@ -46,8 +46,9 @@ static String nullString = "";
 
 ST_LORA_DISCOVERY::ST_LORA_DISCOVERY(uint8_t rxPin, uint8_t txPin)
 {
-    _serialPort = new SoftwareSerial(rxPin, txPin);
     pinMode(rxPin, INPUT);
+    pinMode(txPin, OUTPUT);
+    _serialPort = new SoftwareSerial(rxPin, txPin);
     _txRetryCount = 1;
     _joinRetryCount = JOIN_RETRY_CNT;
     _maxPayloadSize = LoRa_DEFAULT_PAYLOAD_SIZE;
@@ -58,10 +59,11 @@ ST_LORA_DISCOVERY::~ST_LORA_DISCOVERY(void)
 	// Intentionally blank
 }
 
-void ST_LORA_DISCOVERY::setDevEUI(String devEUI)
+void ST_LORA_DISCOVERY::setDevEUI(const char* devEUI)
 {
 	String returnVal;
-	int rc = send(F("DEUI"), F("="), devEUI, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	String eui = devEUI;
+	int rc = send(F("DEUI"), F("="), eui, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
 	if ( rc != LORA_RC_SUCCESS)
 	{
 		DebugPrint(F("Can't set DEVEUI\n"));
@@ -69,10 +71,11 @@ void ST_LORA_DISCOVERY::setDevEUI(String devEUI)
 	while(true);
 }
 
-void ST_LORA_DISCOVERY::setAppEUI(String appEUI)
+void ST_LORA_DISCOVERY::setAppEUI(const char* appEUI)
 {
 	String returnVal;
-	int rc = send(F("DEUI"), F("="), appEUI, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	String eui = appEUI;
+	int rc = send(F("DEUI"), F("="), eui, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
 	if ( rc != LORA_RC_SUCCESS)
 	{
 		DebugPrint(F("Can't set DEVEUI\n"));
@@ -80,10 +83,11 @@ void ST_LORA_DISCOVERY::setAppEUI(String appEUI)
 	while(true);
 }
 
-void ST_LORA_DISCOVERY::setAppKey(String appKey)
+void ST_LORA_DISCOVERY::setAppKey(const char* appKey)
 {
 	String returnVal;
-	int rc = send(F("APPKEY"), F("="), appKey, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
+	String key = appKey;
+	int rc = send(F("APPKEY"), F("="), key, &returnVal, ECHOFLAG, LoRa_INIT_WAIT_TIME);
 	if ( rc != LORA_RC_SUCCESS)
 	{
 		DebugPrint(F("Can't set DEVEUI\n"));
@@ -98,6 +102,7 @@ void ST_LORA_DISCOVERY::begin(LoRaDR dr)
     _serialPort->setTimeout(LoRa_SERIAL_WAIT_TIME);
     _minDR = dr;
     _joinRetryCount = JOIN_RETRY_CNT;
+    _serialPort->begin(_baudrate);
 }
 
 
