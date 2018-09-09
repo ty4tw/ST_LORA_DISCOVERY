@@ -3,7 +3,6 @@
 #include "Commissioning.h"
 
 #define ECHO true
-
 ST_LORA_DISCOVERY LoRa(8,9);
 
 //================================
@@ -111,9 +110,6 @@ void task1(void)
 void task2(void)
 {
     ConsolePrint(F("\n  Task2 invoked\n\n"));
-    ConsolePrint(F("Temperature:  %d degrees C\n"), temp);
-    ConsolePrint(F("%%RH: %d %%\n"), humi);
-    ConsolePrint(F("Pressure: %d Pa\n"), press);
 }
 
 
